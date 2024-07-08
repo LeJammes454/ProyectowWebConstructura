@@ -10,6 +10,14 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link rel="stylesheet" href="./assets/css/style.css">
+
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+<script>
+  (function(){
+    emailjs.init("YOUR_USER_ID");
+  })();
+</script>
+
 </head>
 
 <body data-bs-spy="scroll" data-bs-target=".navbar">
@@ -337,27 +345,27 @@
             </div>
             <div class="row justify-content-center" data-aos="fade-down" data-aos-delay="250">
                 <div class="col-lg-8">
-                    <form action="#" class="row g-3 p-lg-5 p-4 bg-white theme-shadow">
+                    <form id="contact-form" class="row g-3 p-lg-5 p-4 bg-white theme-shadow">
                         <div class="form-group col-lg-6">
-                            <input type="text" class="form-control" placeholder="Nombre" required>
+                          <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" required>
                         </div>
                         <div class="form-group col-lg-6">
-                            <input type="text" class="form-control" placeholder="Apellido" required>
+                          <input type="text" class="form-control" id="apellido" name="apellido" placeholder="Apellido" required>
                         </div>
                         <div class="form-group col-lg-12">
-                            <input type="email" class="form-control" placeholder="Correo Electrónico" required>
+                          <input type="email" class="form-control" id="email" name="email" placeholder="Correo Electrónico" required>
                         </div>
                         <div class="form-group col-lg-12">
-                            <input type="text" class="form-control" placeholder="Asunto" required>
+                          <input type="text" class="form-control" id="asunto" name="asunto" placeholder="Asunto" required>
                         </div>
                         <div class="form-group col-lg-12">
-                            <textarea name="message" rows="5" class="form-control" placeholder="Mensaje"
-                                required></textarea>
+                          <textarea name="message" id="mensaje" rows="5" class="form-control" placeholder="Mensaje" required></textarea>
                         </div>
                         <div class="form-group col-lg-12 d-grid">
-                            <button class="btn btn-brand">Enviar Mensaje</button>
+                          <button type="submit" class="btn btn-brand">Enviar Mensaje</button>
                         </div>
-                    </form>
+                      </form>
+                      
                 </div>
             </div>
         </div>

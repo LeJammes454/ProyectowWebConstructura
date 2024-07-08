@@ -268,7 +268,7 @@ img {
 
 /* TEAM */
 .team-member-content {
-    background-color: var(--c-brand);
+    background-color: #2125299a;
     position: absolute;
     bottom: -24px;
     left: 50%;
@@ -277,11 +277,20 @@ img {
     padding: 24px;
     transition: var(--transition);
     opacity: 0;
+    
 }
 
 .team-member:hover .team-member-content {
     opacity: 1;
     bottom: 24px;
+}
+
+.imgteam{
+    width: 200px; /* Ancho fijo */
+    height: 200px; /* Alto fijo */
+    object-fit: cover; /* Recorta la imagen para que llene el contenedor sin distorsión */
+    overflow: hidden; /* Oculta el contenido que se desborda */
+
 }
 
 /* CONTACT */

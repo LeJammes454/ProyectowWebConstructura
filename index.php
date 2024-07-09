@@ -1,10 +1,46 @@
+<?php
+include 'config.php';
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    // Obtener y sanitizar los datos del formulario
+    $nombre = isset($_POST['nombre']) ? trim($_POST['nombre']) : '';
+    $telefono = isset($_POST['telefono']) ? trim($_POST['telefono']) : '';
+    $correo_electronico = isset($_POST['correo_electronico']) ? trim($_POST['correo_electronico']) : '';
+    $asunto = isset($_POST['asunto']) ? trim($_POST['asunto']) : '';
+    $mensaje = isset($_POST['mensaje']) ? trim($_POST['mensaje']) : '';
+
+    // Verificar que todos los campos estén llenos
+    if (!empty($nombre) && !empty($telefono) && !empty($correo_electronico) && !empty($asunto) && !empty($mensaje)) {
+        // Preparar la consulta SQL
+        $stmt = $conn->prepare("INSERT INTO contactos (nombre, telefono, correo_electronico, asunto, mensaje) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $nombre, $telefono, $correo_electronico, $asunto, $mensaje);
+
+        // Ejecutar la consulta y verificar el resultado
+        if ($stmt->execute()) {
+            $mensaje_exito = "Mensaje enviado exitosamente.";
+        } else {
+            $mensaje_error = "Error al enviar el mensaje: " . $stmt->error;
+        }
+
+        // Cerrar la declaración
+        $stmt->close();
+    } else {
+        $mensaje_error = "Por favor, rellene todos los campos.";
+    }
+
+    // Cerrar la conexión
+    $conn->close();
+}
+?>
+
+
 <!doctype html>
 <html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>bismuto</title>
+    <title>Bismouto</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css">
     <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.css">
@@ -323,46 +359,47 @@
     </section>
 
 
-    <!-- CONTACT -->
-    <section class="section-padding bg-light" id="contact">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center" data-aos="fade-down" data-aos-delay="150">
-                    <div class="section-title">
-                        <h1 class="display-4 fw-semibold">Contáctanos</h1>
-                        <div class="line"></div>
-                        <p>En Bismouto, estamos siempre disponibles para atender tus consultas y colaborar en tus
-                            proyectos de construcción.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row justify-content-center" data-aos="fade-down" data-aos-delay="250">
-                <div class="col-lg-8">
-                    <form action="#" class="row g-3 p-lg-5 p-4 bg-white theme-shadow">
-                        <div class="form-group col-lg-6">
-                            <input type="text" class="form-control" placeholder="Nombre" required>
-                        </div>
-                        <div class="form-group col-lg-6">
-                            <input type="text" class="form-control" placeholder="Apellido" required>
-                        </div>
-                        <div class="form-group col-lg-12">
-                            <input type="email" class="form-control" placeholder="Correo Electrónico" required>
-                        </div>
-                        <div class="form-group col-lg-12">
-                            <input type="text" class="form-control" placeholder="Asunto" required>
-                        </div>
-                        <div class="form-group col-lg-12">
-                            <textarea name="message" rows="5" class="form-control" placeholder="Mensaje"
-                                required></textarea>
-                        </div>
-                        <div class="form-group col-lg-12 d-grid">
-                            <button class="btn btn-brand">Enviar Mensaje</button>
-                        </div>
-                    </form>
+<!-- CONTACT -->
+<section class="section-padding bg-light" id="contact">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center" data-aos="fade-down" data-aos-delay="150">
+                <div class="section-title">
+                    <h1 class="display-4 fw-semibold">Contáctanos</h1>
+                    <div class="line"></div>
+                    <p>En Bismouto, estamos siempre disponibles para atender tus consultas y colaborar en tus proyectos de construcción.</p>
                 </div>
             </div>
         </div>
-    </section>
+        <div class="row justify-content-center" data-aos="fade-down" data-aos-delay="250">
+            <div class="col-lg-8">
+                <?php if(isset($mensaje_exito)) { echo "<div class='alert alert-success'>$mensaje_exito</div>"; } ?>
+                <?php if(isset($mensaje_error)) { echo "<div class='alert alert-danger'>$mensaje_error</div>"; } ?>
+                <form action="index.php#contact" method="post" class="row g-3 p-lg-5 p-4 bg-white theme-shadow">
+                    <div class="form-group col-lg-6">
+                        <input type="text" class="form-control" name="nombre" placeholder="Nombre" required>
+                    </div>
+                    <div class="form-group col-lg-6">
+                        <input type="text" class="form-control" name="telefono" placeholder="Teléfono" required>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <input type="email" class="form-control" name="correo_electronico" placeholder="Correo Electrónico" required>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <input type="text" class="form-control" name="asunto" placeholder="Asunto" required>
+                    </div>
+                    <div class="form-group col-lg-12">
+                        <textarea name="mensaje" rows="5" class="form-control" placeholder="Mensaje" required></textarea>
+                    </div>
+                    <div class="form-group col-lg-12 d-grid">
+                        <button type="submit" class="btn btn-brand">Enviar Mensaje</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
 
 
     <!-- BLOG -->
@@ -434,7 +471,7 @@
                     </div>
                 </div>
                 <div class="col-lg-3 col-sm-6">
-                    <h5   class="mb-3 foot">SERVICIOS</h5>
+                    <h5 class="mb-3 foot">SERVICIOS</h5>
                     <div class="line mb-3"></div>
                     <ul class="list-unstyled">
                         <li><a href="#" class="text-white">Construcción de Edificios</a></li>
@@ -481,8 +518,6 @@
         </div>
     </div>
 </footer>
-
-
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui@4.0/dist/fancybox.umd.js"></script>
